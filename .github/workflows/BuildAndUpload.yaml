@@ -1,0 +1,24 @@
+name: Build and upload image to GHCR
+
+on:
+  [workflow_dispatch]
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build secrets file
+        run: |
+          echo machine deb.beckhoff.com login ${{ secrets.BECKHOFF_USERNAME }} password ${{ secrets.BECKHOFF_PASSWORD }} >> tc31-xar-base/apt-config/bhf.conf
+          echo machine deb-mirror.beckhoff.com login ${{ secrets.BECKHOFF_USERNAME }} password ${{ secrets.BECKHOFF_PASSWORD }} >> tc31-xar-base/apt-config/bhf.conf
+      - name: build image
+        run: DOCKER_BUILDKIT=1 docker build ./tc31-xar-base/ -t ghcr.io/ietv/tc3_xar_um_ietv:latest --secret id=apt,src=tc31-xar-base/apt-config/bhf.conf
+      - name: login to ghcr
+        run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+      - name: push
+        run: docker push ghcr.io/ietv/tc3_xar_um_ietv:latest
