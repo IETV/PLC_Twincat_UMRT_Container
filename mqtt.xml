@@ -3,7 +3,7 @@
 xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2015/12/TcConfig">
 <RemoteConnections>
     <Mqtt Unidirectional="true">
-        <Address Port="1883">ip-address-of-container-host</Address>
+        <Address Port="18883">ip-address-of-container-host</Address>
         <Topic>AdsOverMqtt</Topic>
     </Mqtt>
 </RemoteConnections>
