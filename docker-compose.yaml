@@ -10,7 +10,7 @@ services:
       - ./simple-mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
   tc31-xar-um:
     image: ghcr.io/ietv/tc3_xar_um_ietv:latest
-    hostname: tc31-xar-um
+    hostname: tc31-xar-um #This is what will show up in AMS-router
     restart: unless-stopped
     depends_on:
       - mosquitto
@@ -19,3 +19,4 @@ services:
       - /dev/hugepages:/dev/hugepages:rw
     environment:
       AMS_NETID: 15.15.15.15.1.1
+      REALTIME: false
